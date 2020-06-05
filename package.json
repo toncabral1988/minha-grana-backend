@@ -1,0 +1,8 @@
+{
+  "name": "minha-grana-backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/ton-cabral/minha-grana-backend.git",
+  "author": "Ton <washingtonf.nascimento@gmail.com>",
+  "license": "MIT"
+}
