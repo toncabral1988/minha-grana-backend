@@ -6,8 +6,17 @@ module.exports = {
     host: 'localhost',
     port: 5432,
     dialect: 'postgres',
-    operatorsAliases: false,
     logging: true,
+    define: {
+      timestamps: true,
+      underscored: true,
+      underscoredAll: true
+    }
+  },
+  test: {
+    dialect: 'sqlite',
+    storage: './src/database/__tests__/database.sqlite',
+    logging: false,
     define: {
       timestamps: true,
       underscored: true,

@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const config = require('./config/config')
+const options = require('./config/config')
 
 const env = process.env.NODE_ENV || 'development'
 
@@ -13,7 +13,14 @@ class Database {
     }
 
     private async init () {
-      this.connection = new Sequelize(config[env as string])
+      const config = options[env as string]
+
+      this.connection = new Sequelize(
+        config.database,
+        config.username,
+        config.password,
+        config
+      )
 
       if (this.connection) {
         await this.connection.sync()
