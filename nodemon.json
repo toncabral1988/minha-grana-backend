@@ -1,7 +1,6 @@
 {
     "watch": ["src"],
-    "ext": "ts",
-    "execMap": {
-        "ts": "sucrase-node src/index.ts"
-    }
+    "ext": ".ts,.js",
+    "ignore": [],
+    "exec": "node --inspect -r tsconfig-paths/register -r sucrase/register"
 }
