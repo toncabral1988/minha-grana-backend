@@ -79,3 +79,12 @@ export const remove = {
     description: 'Houve algum problema na operação com a base de dados'
   }
 }
+
+
+export default {
+  post,
+  get,
+  getById,
+  put,
+  remove
+}

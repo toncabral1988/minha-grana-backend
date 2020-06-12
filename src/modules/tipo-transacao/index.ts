@@ -1,4 +1,5 @@
 import { TagOptions } from 'hapi-swagger'
+import TipoTransacaoRoutes from './tipo-transacao.routes'
 
 const tag: TagOptions = {
     name: 'tipos-transacao',
@@ -7,7 +8,7 @@ const tag: TagOptions = {
 
 export default {
     name: 'Tipo Transação',
-    dirname: __dirname,
+    routes: TipoTransacaoRoutes,
     prefix: 'tipos-transacao',
     tag 
 }
