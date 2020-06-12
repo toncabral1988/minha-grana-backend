@@ -1,15 +1,16 @@
-import { Manifest } from '@hapi/glue'
-import { RegisterOptions } from 'hapi-swagger'
+import { Manifest, PluginObject } from '@hapi/glue'
+import { RegisterOptions, TagOptions } from 'hapi-swagger'
 import { resolve } from 'path'
 
-import fileLoader from './utils/file-loader'
+import fileLoader from '@/utils/file-loader'
+import Modules from '@/modules'
 
 const packagePath = '../package.json'
 const Pack = require(packagePath)
 
 export default async () => {
 
-    const modules = await fileLoader(resolve(__dirname, 'modules', '**/index.*+(ts|js)'), 2)
+    const modules = await Modules()
 
     const swaggerOptions: RegisterOptions = {
         info: {
@@ -17,7 +18,7 @@ export default async () => {
             title: 'Minha Grana - API',
             description: 'Backend Minha Grana'
         },
-        tags: modules.map(m => m.tag),
+        tags: modules.tags,
         grouping: 'tags',
         sortEndpoints: 'ordered',
         jsonPath: '/api/swagger/swagger.json',
@@ -33,18 +34,14 @@ export default async () => {
         },
         register: {
             plugins: [
+                { plugin: 'blipp' },
                 { plugin: '@hapi/inert' },
                 { plugin: '@hapi/vision' },
                 {
                     plugin: 'hapi-swagger',
                     options: swaggerOptions
                 },
-                ...modules.map(m => {
-                    return {
-                        plugin: m.plugin,
-                        routes: m.routes
-                    }
-                })
+                ...modules.plugins
             ]
         }
     }

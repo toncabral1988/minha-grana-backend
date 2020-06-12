@@ -5,16 +5,16 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     try {
       await queryInterface.bulkInsert('categorias', [
-        { nome: 'SALÁRIO', created_at: new Date(), updated_at: new Date() },
-        { nome: 'FIXO', created_at: new Date(), updated_at: new Date() },
-        { nome: 'ALIMENTAÇÃO', created_at: new Date(), updated_at: new Date() },
-        { nome: 'TRANSPORTE', created_at: new Date(), updated_at: new Date() },
-        { nome: 'EDUCAÇÃO', created_at: new Date(), updated_at: new Date() },
-        { nome: 'PET', created_at: new Date(), updated_at: new Date() },
-        { nome: 'LAZER', created_at: new Date(), updated_at: new Date() },
-        { nome: 'IMPOSTOS', created_at: new Date(), updated_at: new Date() },
-        { nome: 'TAXAS', created_at: new Date(), updated_at: new Date() },
-        { nome: 'OUTROS', created_at: new Date(), updated_at: new Date() },
+        { nome: 'SALÁRIO' },
+        { nome: 'FIXO' },
+        { nome: 'ALIMENTAÇÃO' },
+        { nome: 'TRANSPORTE' },
+        { nome: 'EDUCAÇÃO' },
+        { nome: 'PET' },
+        { nome: 'LAZER' },
+        { nome: 'IMPOSTOS' },
+        { nome: 'TAXAS' },
+        { nome: 'OUTROS' },
       ], { transaction })
 
       await transaction.commit()

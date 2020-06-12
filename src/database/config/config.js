@@ -9,18 +9,16 @@ module.exports = {
     logging: true,
     define: {
       timestamps: true,
-      underscored: true,
-      underscoredAll: true
+      underscored: true
     }
   },
   test: {
     dialect: 'sqlite',
-    storage: './src/database/__tests__/database.sqlite',
+    storage: './src/__tests__/database.sqlite',
     logging: false,
     define: {
       timestamps: true,
-      underscored: true,
-      underscoredAll: true
+      underscored: true
     }
   }
 }

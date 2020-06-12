@@ -1,13 +1,13 @@
 import { TagOptions } from 'hapi-swagger'
 
 const tag: TagOptions = {
-    name: 'api',
+    name: 'tipos-transacao',
     description: 'Api Minha Grana'
 }
 
 export default {
-    name: 'Hello World',
+    name: 'Tipo Transação',
     dirname: __dirname,
-    prefix: '',
+    prefix: 'tipos-transacao',
     tag 
 }
