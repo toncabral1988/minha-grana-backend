@@ -3,11 +3,11 @@ import {
   DataTypes, 
   CreateOptions, 
   BulkCreateOptions, 
-  InstanceUpdateOptions 
+  InstanceUpdateOptions, 
+  Transaction
 } from "sequelize";
 
 import sequelize from '@/database'
-import lastIndex from '@/utils/last-index'
 
 class TipoTransacao extends Model {
   public id: number
@@ -22,20 +22,42 @@ const hooks = {
     tipo.nome = tipo.nome.toUpperCase()
 
     if (!tipo.id) {
-      tipo.id = (await lastIndex<TipoTransacao>(options.transaction)) + 1
+      tipo.id = (await lastIndex(options.transaction)) + 1
     }
   },
   beforeBulkCreate: async (tipos: TipoTransacao[], options: BulkCreateOptions) => {
+
+    
+    let lastId = (await lastIndex(options.transaction))
+
     for (const tipo of tipos) {
       tipo.nome = tipo.nome.toUpperCase()
 
-      tipo.id = (await lastIndex<TipoTransacao>(options.transaction)) + 1
+      if (!tipo.id) {
+        tipo.id = ++lastId
+      }
     }
   },
   beforeUpdate: (tipo: TipoTransacao, options: InstanceUpdateOptions) => {
     tipo.nome = tipo.nome.toUpperCase()
   }
 }
+
+const lastIndex = async (transaction?: Transaction) => {
+  const [lastIndex] = await TipoTransacao.findAll({
+    limit: 1,
+    order: [['id', 'DESC']],
+    transaction
+  })
+  
+  if (lastIndex) {
+    return lastIndex.id
+  }
+  
+  return 0
+  
+}
+
 
 TipoTransacao.init({
   nome: DataTypes.STRING
@@ -45,4 +67,4 @@ TipoTransacao.init({
   sequelize
 })
 
-export default TipoTransacao
+export { TipoTransacao }

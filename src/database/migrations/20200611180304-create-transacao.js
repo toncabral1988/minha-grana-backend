@@ -42,14 +42,8 @@ module.exports = {
           type: Sequelize.STRING(1024),
           allowNull: true
         },
-        created_at: {
-          type: Sequelize.DATE,
-          allowNull: false,
-        },
-        updated_at: {
-          type: Sequelize.DATE,
-          allowNull: false,
-        }
+        created_at: Sequelize.DATE,
+        updated_at: Sequelize.DATE
       }, { transaction })
 
       await queryInterface.addConstraint('transacoes', ['tipo_transacoes_id'], {

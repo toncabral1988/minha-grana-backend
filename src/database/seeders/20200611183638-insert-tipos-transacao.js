@@ -5,8 +5,8 @@ module.exports = {
     const transaction = await queryInterface.sequelize.transaction()
     try {
       await queryInterface.bulkInsert('tipos_transacao', [
-        { id: 1, nome: 'RECEITA', created_at: new Date(), updated_at: new Date() },
-        { id: 2, nome: 'DESPESA', created_at: new Date(), updated_at: new Date() }
+        { id: 1, nome: 'RECEITA' },
+        { id: 2, nome: 'DESPESA' }
       ], { transaction })
 
       await transaction.commit()

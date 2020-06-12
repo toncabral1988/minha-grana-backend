@@ -15,7 +15,7 @@ export default async () => {
     dirname: string,
     prefix: string,
     tag: TagOptions
-  }[] = await fileLoader(resolve(__dirname, '**/*.route*+(ts|js)'), 2)
+  }[] = await fileLoader(resolve(__dirname, '*/**/index.*+(ts|js)'), 2)
 
   return {
     plugins: modules.map(m => {
