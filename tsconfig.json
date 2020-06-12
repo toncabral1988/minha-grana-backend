@@ -18,13 +18,16 @@
         "paths": {
             "@/*": [
                 "./*"
+            ],
+            "@tipo-transacao/*": [
+                "modules/tipo-transacao/*"
             ]
         },
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true
     },
     "include": [
-        "src"
+        "src/**/*"
     ],
     "exclude": [
         "node_modules",

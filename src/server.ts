@@ -1,7 +1,9 @@
 import glue from '@hapi/glue'
+import manifest from './manifest'
+
 import { Server } from '@hapi/hapi'
 
-import manifest from './manifest'
+
 import sequelize from './database'
 
 const options = {
@@ -22,13 +24,9 @@ const compose = async (): Promise<Server> => {
 }
 
 export const init = async (): Promise<Server> => {
-    await sequelize.sync()
-    
     await compose()
-
-
+    await sequelize.sync()
     await server.initialize()
-
     return server
 }
 
