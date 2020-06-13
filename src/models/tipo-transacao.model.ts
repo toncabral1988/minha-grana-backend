@@ -4,10 +4,13 @@ import {
   CreateOptions, 
   BulkCreateOptions, 
   InstanceUpdateOptions, 
-  Transaction
+  Transaction,
+  BelongsToManyGetAssociationsMixin,
+  Association
 } from "sequelize";
 
 import sequelize from '@/database'
+import { Categoria } from "./categoria.model";
 
 class TipoTransacao extends Model {
   public id: number
@@ -15,11 +18,19 @@ class TipoTransacao extends Model {
 
   public readonly created_at!: Date
   public readonly updated_at!: Date
+
+  public getCategorias!: BelongsToManyGetAssociationsMixin<Categoria>
+
+  public readonly categorias?: Categoria[]
+
+  public static associations: {
+    categorias: Association<TipoTransacao, Categoria>
+  }
 }
 
 const hooks = {
   beforeCreate: async (tipo: TipoTransacao, options: CreateOptions) => {
-    tipo.nome = tipo.nome.toUpperCase()
+    // tipo.nome = tipo.nome.toUpperCase()
 
     if (!tipo.id) {
       tipo.id = (await lastIndex(options.transaction)) + 1
@@ -31,7 +42,7 @@ const hooks = {
     let lastId = (await lastIndex(options.transaction))
 
     for (const tipo of tipos) {
-      tipo.nome = tipo.nome.toUpperCase()
+      // tipo.nome = tipo.nome.toUpperCase()
 
       if (!tipo.id) {
         tipo.id = ++lastId
@@ -39,7 +50,7 @@ const hooks = {
     }
   },
   beforeUpdate: (tipo: TipoTransacao, options: InstanceUpdateOptions) => {
-    tipo.nome = tipo.nome.toUpperCase()
+    // tipo.nome = tipo.nome.toUpperCase()
   }
 }
 

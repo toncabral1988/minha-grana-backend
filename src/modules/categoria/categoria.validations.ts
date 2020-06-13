@@ -34,6 +34,29 @@ const postPayload = Joi.object({
 
 })
 
+const queryTipo = Joi.object({
+  tipo: Joi.number()
+    .min(1)
+    .options({
+      messages: {
+        'number.min': 'É necessário informar um id de tipo válido'
+      }
+    })
+})
+
+const idParam = Joi.object({
+  id: Joi.number()
+    .required()
+    .min(1)
+    .options({
+      messages: {
+        'number.min': 'É necessário informar um id válido'
+      }
+    })
+})
+
 export default {
-  post: validate({ payload: postPayload })
+  post: validate({ payload: postPayload }),
+  get: validate({ query: queryTipo }),
+  getById: validate({ params: idParam })
 }

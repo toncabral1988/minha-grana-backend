@@ -14,10 +14,36 @@ const post: ServerRoute = {
     tags,
     handler: CategoriaController.store,
     validate: CategoriaValidations.post,
-    plugins: CategoriaResponses.postReponses
+    plugins: CategoriaResponses.postResponses
+  }
+}
+
+const get: ServerRoute = {
+  method: 'GET',
+  path: '/',
+  options: {
+    notes: 'Recupera as categorias registradas na base de dados',
+    tags,
+    handler: CategoriaController.index,
+    validate: CategoriaValidations.get,
+    plugins: CategoriaResponses.getResponses
+  }
+}
+
+const getById: ServerRoute = {
+  method: 'GET',
+  path: '/{id}',
+  options: {
+    notes: 'Recupera uma categoria pelo seu id',
+    tags,
+    handler: CategoriaController.indexById,
+    validate: CategoriaValidations.getById,
+    plugins: CategoriaResponses.getByIdResponses
   }
 }
 
 export default [
-  post
+  post,
+  get,
+  getById
 ]

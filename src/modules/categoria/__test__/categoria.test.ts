@@ -1,9 +1,10 @@
 import { Categoria } from '@/models/categoria.model';
-import { Server } from '@hapi/hapi'
+import { Server, ServerInjectResponse } from '@hapi/hapi'
 
 import { init } from '@/server'
 import sequelize from '@/database'
 import utils from './categoria.utils'
+import { TipoTransacao } from '@/models/tipo-transacao.model';
 
 describe('Módulo - Categoria', () => {
   const url = `/api/categorias`
@@ -63,7 +64,7 @@ describe('Módulo - Categoria', () => {
       const result = response.result as Categoria
 
       expect(result).not.toBeNull()
-      
+
       const tipos = await result.getTipos()
 
       expect(tipos).not.toBeNull()
@@ -83,6 +84,117 @@ describe('Módulo - Categoria', () => {
       })
 
       expect(response.statusCode).toBe(400)
+    })
+  })
+
+  describe('GET /', () => {
+    it('should return a list of categories', async () => {
+      const categorias = await Categoria.bulkCreate(utils.generateCategorias())
+
+      expect(categorias).not.toBeNull()
+      expect(categorias.length).toBe(3)
+
+      const response = await server.inject({
+        method: 'GET',
+        url
+      })
+
+      expect(response.statusCode).toBe(200)
+
+      const result = response.result as Categoria[]
+
+      expect(result).not.toBeNull()
+
+      expect(result.length).toBe(3)
+    })
+
+    it('should not return a list of categories when there are not records on the database', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+  })
+
+  describe('GET /?tipo', () => {
+    it('should return a list of categories by type', async () => {
+      const categorias = await utils.insertCategoriasWithTipos()
+
+      expect(categorias).not.toBeNull()
+      expect(categorias.length).toBe(3)
+
+      const tipos = await TipoTransacao.findAll()
+
+      expect(tipos).not.toBeNull()
+      expect(tipos.length).toBeGreaterThan(0)
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}?tipo=${tipos[0].id}`
+      })
+
+      expect(response.statusCode).toBe(200)
+
+      const result = response.result as Categoria[]
+
+      expect(result).not.toBeNull()
+      expect(result.length).toBe(2)
+
+      for (const r of result) {
+        expect(r.tipos).not.toBeNull()
+        expect(r.tipos?.length).toBeGreaterThan(0)
+
+        expect(r.tipos?.some(t => t.id === tipos[0].id))
+      }
+    })
+
+    it('should not return a list of categories when type id is invalid', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}/?tipo=4`
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+  })
+
+  describe('GET /{id}', () => {
+    it('should return a category by id', async () => {
+      const categoria = await Categoria.create(utils.generateFakeCategoria())
+
+      expect(categoria).not.toBeNull()
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}/${categoria.id}`
+      })
+
+      expect(response.statusCode).toBe(200)
+
+      const result = response.result as Categoria
+
+      expect(result).not.toBeNull()
+      expect(result.nome).toBe(categoria.nome)
+    })
+
+    it('should not return a category when id is invalid', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}/a`
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should not return a category when id is not found on the database', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}/14`
+      })
+
+      expect(response.statusCode).toBe(404)
     })
   })
 })
