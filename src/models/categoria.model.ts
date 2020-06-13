@@ -33,7 +33,7 @@ class Categoria extends Model {
 Categoria.init({
   nome: DataTypes.STRING
 }, {
-  tableName: 'categoria',
+  tableName: 'categorias',
   hooks: {
     beforeCreate: async (tipo: Categoria, options: CreateOptions) => {
       tipo.nome = tipo.nome.toUpperCase()

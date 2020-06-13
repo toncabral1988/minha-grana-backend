@@ -1,5 +1,3 @@
-
-
 import { Server, ServerRoute } from '@hapi/hapi'
 import { TagOptions } from 'hapi-swagger'
 import { resolve } from 'path'
