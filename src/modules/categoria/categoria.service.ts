@@ -20,16 +20,7 @@ export default {
     const categoria = await Categoria.create(dadosCategoria, { transaction })
 
     if (tipos) {
-      const tiposFounded: TipoTransacao[] = []
-
-      for (const tipo of tipos) {
-        const [tipoFounded,] = await TipoTransacao.findOrCreate({
-          where: { ...tipo },
-          transaction
-        })
-
-        tiposFounded.push(tipoFounded)
-      }
+      const tiposFounded: TipoTransacao[] = await findOrCreateTipos(tipos, transaction)
 
       await categoria.setTipos(tiposFounded, { transaction })
     }
@@ -56,5 +47,39 @@ export default {
       {
         transaction,
         include
-      })
+      }),
+
+  update: async (id: number, payload: any, transaction: Transaction) => {
+    const { tipos, ...dadosCategoria } = payload
+
+    let categoria = await Categoria.findByPk(id, { transaction })
+
+    if (!categoria) {
+      return null
+    }
+
+    categoria = await categoria.update({ ...dadosCategoria }, { transaction })
+
+    if (tipos) {
+      const tiposFounded: TipoTransacao[] = await findOrCreateTipos(tipos, transaction)
+
+      await categoria.setTipos(tiposFounded, { transaction })
+    }
+
+    return categoria
+  }
+}
+
+async function findOrCreateTipos(tipos: any, transaction: Transaction | undefined) {
+  const tiposFounded: TipoTransacao[] = []
+
+  for (const tipo of tipos) {
+    const [tipoFounded,] = await TipoTransacao.findOrCreate({
+      where: { ...tipo },
+      transaction
+    })
+
+    tiposFounded.push(tipoFounded)
+  }
+  return tiposFounded
 }

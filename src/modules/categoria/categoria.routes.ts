@@ -42,8 +42,21 @@ const getById: ServerRoute = {
   }
 }
 
+const put: ServerRoute = {
+  method: 'PUT',
+  path: '/{id}',
+  options: {
+    notes: 'Atualiza uma categoria pelo id',
+    tags,
+    handler: CategoriaController.update,
+    validate: CategoriaValidations.put,
+    plugins: CategoriaResponses.putResponses
+  }
+}
+
 export default [
   post,
   get,
-  getById
+  getById,
+  put
 ]

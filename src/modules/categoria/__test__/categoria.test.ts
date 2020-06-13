@@ -197,4 +197,95 @@ describe('Módulo - Categoria', () => {
       expect(response.statusCode).toBe(404)
     })
   })
+
+  describe('PUT  /{id}', () => {
+    it('should udpate a category', async () => {
+      const categoria = await Categoria.create(utils.generateFakeCategoria())
+
+      expect(categoria).not.toBeNull()
+
+      const dados = utils.generateCategoriaWithTipos()
+
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/${categoria.id}`,
+        payload: dados
+      })
+
+      expect(response.statusCode).toBe(200)
+
+      const result = response.result as Categoria
+
+      expect(result).not.toBeNull()
+      expect(result.nome).toBe(dados.nome.toUpperCase())
+
+      const tipos = await result.getTipos()
+
+      expect(tipos).not.toBeNull()
+      expect(tipos.length).toBe(dados.tipos.length)
+    })
+
+    it('should not update when id is invalid', async() => {
+      const categoria = await Categoria.create(utils.generateFakeCategoria())
+
+      expect(categoria).not.toBeNull()
+
+      const dados = utils.generateCategoriaWithTipos()
+
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/a`,
+        payload: dados
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should not update when request payload is invalid', async() => {
+      const categoria = await Categoria.create(utils.generateFakeCategoria())
+
+      expect(categoria).not.toBeNull()
+
+      const dados = utils.generateCategoriaWithTipos()
+
+      dados.nome = ''
+
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/${categoria.id}`,
+        payload: dados
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should not update when id is not registered on the database', async() => {
+      const dados = utils.generateCategoriaWithTipos()
+
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/12`,
+        payload: dados
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+
+    it('should not update when the name is already registered on the database', async() => {
+      const categorias = await Categoria.bulkCreate(utils.generateCategorias())
+
+      expect(categorias).not.toBeNull()
+      expect(categorias.length).toBe(3)
+
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/${categorias[0].id}`,
+        payload: {
+          nome: categorias[1].nome
+        }
+      })
+
+      expect(response.statusCode).toBe(422)
+    })
+  })
 })

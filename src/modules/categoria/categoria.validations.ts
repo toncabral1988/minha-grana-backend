@@ -34,6 +34,38 @@ const postPayload = Joi.object({
 
 })
 
+const putPayload = Joi.object({
+  nome: Joi.string()
+    .optional()
+    .not().empty()
+    .options({
+      messages: {
+        'string.required': 'É obrigatório informar o nome do usuário',
+        'string.min': 'O nome não pode ser vazio'
+      }
+    }),
+  tipos: Joi.array().items({
+    id: Joi.number()
+      .optional()
+      .min(1)
+      .options({
+        messages: {
+          'number.min': 'O id do tipo se informado, deve ser um id válido'
+        }
+      }),
+    nome: Joi.string()
+      .required()
+      .not().empty()
+      .options({
+        messages: {
+          'string.required': 'É obrigatório informar o nome do usuário',
+          'string.min': 'O nome não pode ser vazio'
+        }
+      })
+  }).optional()
+
+})
+
 const queryTipo = Joi.object({
   tipo: Joi.number()
     .min(1)
@@ -58,5 +90,6 @@ const idParam = Joi.object({
 export default {
   post: validate({ payload: postPayload }),
   get: validate({ query: queryTipo }),
-  getById: validate({ params: idParam })
+  getById: validate({ params: idParam }),
+  put: validate({ params: idParam, payload: putPayload })
 }

@@ -63,5 +63,16 @@ export default {
       description: 'Categoria não encontrada'
     },
     500: internal
-  })
+  }),
+
+  putResponses: swaggerConfigurationResponse({
+    200: {
+      description: 'Categoria cadastrada com sucesso',
+      schemas: categoriaSchema
+    },
+    400: {
+      description: 'Parâmetros da requição inválidos'
+    },
+    500: internal
+  }),
 }

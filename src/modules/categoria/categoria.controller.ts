@@ -1,5 +1,6 @@
 import { Request, ResponseToolkit } from '@hapi/hapi'
 import Boom from '@hapi/boom'
+import { UniqueConstraintError } from 'sequelize'
 
 import sequelize from '@/database'
 import CategoriaService from './categoria.service'
@@ -62,5 +63,31 @@ export default {
       await transaction.rollback()
       return internal()
     } 
+  },
+
+  update: async (request: Request, h: ResponseToolkit) => {
+    const transaction = await sequelize.transaction()
+    try {
+      const { id } = request.params
+
+      const categoria = await CategoriaService.update(Number(id), request.payload, transaction)
+
+      if (!categoria) {
+        await transaction.rollback()
+        return Boom.notFound('Não foi possível atualizar a categoria, pois o id informado não está registrado na base de dados')
+      }
+
+      await transaction.commit()
+      return h.response(categoria as any)
+        .message('Categoria atualizada com sucesso')
+        .code(200)
+    } catch (error) {
+      await transaction.rollback()
+
+      if (error instanceof UniqueConstraintError) {
+        return Boom.badData('Não foi possível atualizar a categoria, pois o nome informado já está registrado na base de dados')
+      }
+      return internal()
+    }
   }
 }
