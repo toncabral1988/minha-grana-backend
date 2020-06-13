@@ -85,6 +85,22 @@ describe('Módulo - Categoria', () => {
 
       expect(response.statusCode).toBe(400)
     })
+
+    it('should not insert a category when the name is already registered on the base', async () => {
+      const categoria = await Categoria.create(utils.generateFakeCategoria())
+
+      expect(categoria).not.toBeNull()
+
+      const response = await server.inject({
+        method: 'POST',
+        url,
+        payload: {
+          nome: categoria.nome
+        }
+      })
+
+      expect(response.statusCode).toBe(422)
+    })
   })
 
   describe('GET /', () => {

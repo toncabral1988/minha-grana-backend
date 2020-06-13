@@ -19,6 +19,10 @@ export default {
         .code(201)
     } catch (error) {
       await transaction.rollback()
+
+      if (error instanceof UniqueConstraintError) {
+        return Boom.badData('Não foi possível cadastrar a categoria, pois o nome informado já está registrado na base de dados')
+      }
       return internal()
     }
   },
