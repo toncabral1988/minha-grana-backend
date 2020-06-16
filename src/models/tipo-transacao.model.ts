@@ -8,11 +8,13 @@ import {
   BelongsToManyGetAssociationsMixin,
   Association,
   FindOptions,
-  where
+  where,
+  HasManyGetAssociationsMixin
 } from "sequelize";
 
 import sequelize from '@/database'
 import { Categoria } from "./categoria.model";
+import { Transacao } from "./transacao.model";
 
 class TipoTransacao extends Model {
   public id: number
@@ -23,10 +25,14 @@ class TipoTransacao extends Model {
 
   public getCategorias!: BelongsToManyGetAssociationsMixin<Categoria>
 
+  public getTransacoes!: HasManyGetAssociationsMixin<Transacao>
+
   public readonly categorias?: Categoria[]
+  public readonly transacoes?: Transacao[]
 
   public static associations: {
     categorias: Association<TipoTransacao, Categoria>
+    transacoes: Association<TipoTransacao, Transacao>
   }
 }
 
@@ -71,13 +77,17 @@ const lastIndex = async (transaction?: Transaction) => {
   
 }
 
-
 TipoTransacao.init({
   nome: DataTypes.STRING
 }, {
   tableName: 'tipos_transacao',
   hooks,
   sequelize
+})
+
+TipoTransacao.hasMany(Transacao, {
+  foreignKey: 'tipo_transacao_id',
+  as: 'transacoes'
 })
 
 export { TipoTransacao }

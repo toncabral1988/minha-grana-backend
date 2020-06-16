@@ -32,6 +32,10 @@ module.exports = {
           type: Sequelize.INTEGER,
           allowNull: true,
         },
+        categoria_id: {
+          type: Sequelize.INTEGER,
+          allowNull: true,
+        },
         situacao: {
           type: Sequelize.SMALLINT,
           allowNull: false,
@@ -51,6 +55,18 @@ module.exports = {
         name: 'fk_transacoes_tipo',
         references: {
           table: 'tipos_transacao',
+          field: 'id'
+        },
+        onDelete: 'restrict',
+        onUpdate: 'cascade',
+        transaction
+      })
+
+      await queryInterface.addConstraint('transacoes', ['categoria_id'], {
+        type: 'foreign key',
+        name: 'fk_transacoes_categoria',
+        references: {
+          table: 'categorias',
           field: 'id'
         },
         onDelete: 'restrict',

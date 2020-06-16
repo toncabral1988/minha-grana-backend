@@ -6,11 +6,13 @@ import {
   InstanceUpdateOptions, 
   BelongsToManySetAssociationsMixin,
   BelongsToManyGetAssociationsMixin,
-  Association
+  Association,
+  HasManyGetAssociationsMixin
 } from "sequelize"
 
 import sequelize from '@/database'
 import { TipoTransacao } from "./tipo-transacao.model"
+import { Transacao } from "./transacao.model"
 
 class Categoria extends Model {
   public id: number
@@ -22,10 +24,14 @@ class Categoria extends Model {
   public setTipos!: BelongsToManySetAssociationsMixin<TipoTransacao, number>
   public getTipos!: BelongsToManyGetAssociationsMixin<TipoTransacao>
 
+  public getTransacoes!: HasManyGetAssociationsMixin<Transacao>
+
   public readonly tipos?: TipoTransacao[]
+  public readonly transacoes?: Transacao[]
 
   public static associations: {
     tipos: Association<Categoria, TipoTransacao>
+    transacoes: Association<Categoria, Transacao>
   }
 
 }
@@ -60,6 +66,11 @@ TipoTransacao.belongsToMany(Categoria, {
   through: 'categorias_tipos',
   as: 'categorias',
   foreignKey: 'tipo_transacao_id'
+})
+
+Categoria.hasMany(Transacao, {
+  foreignKey: 'categoria_id',
+  as: 'transacoes'
 })
 
 export { Categoria }
