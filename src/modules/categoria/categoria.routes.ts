@@ -54,9 +54,22 @@ const put: ServerRoute = {
   }
 }
 
+const remove: ServerRoute = {
+  method: 'DELETE',
+  path: '/{id}',
+  options: {
+    notes: 'Remove uma categotia pelo id',
+    tags,
+    handler: CategoriaController.remove,
+    validate: CategoriaValidations.remove,
+    plugins: CategoriaResponses.deleteResponses
+  }
+}
+
 export default [
   post,
   get,
   getById,
-  put
+  put,
+  remove
 ]

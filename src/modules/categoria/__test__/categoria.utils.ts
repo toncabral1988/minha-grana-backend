@@ -2,6 +2,7 @@ import faker from 'faker'
 
 import CategoriasService from '../categoria.service'
 import { Categoria } from '@/models/categoria.model'
+import sequelize from '@/database'
 
 const categorias = [
   {
@@ -41,15 +42,20 @@ export default {
   }),
 
   insertCategoriasWithTipos: async () => {
-    const categoriaCriadas: Categoria[] = []
-
-    for (const c of categorias) {
-      const categoriaCriada = await CategoriasService.store(c)
-
-      categoriaCriadas.push(categoriaCriada)
+    const transaction = await sequelize.transaction()
+    
+    try {
+      const categoriaCriadas: Categoria[] = []
+      for (const c of categorias) {
+        const categoriaCriada = await CategoriasService.store(c, transaction)
+  
+        categoriaCriadas.push(categoriaCriada)
+      }
+  
+      await transaction.commit()
+      return categoriaCriadas 
+    } catch (error) {
+      await transaction.rollback()
     }
-
-    return categoriaCriadas
-
   }
 }

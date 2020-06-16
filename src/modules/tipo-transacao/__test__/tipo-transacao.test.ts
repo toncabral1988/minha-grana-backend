@@ -13,8 +13,8 @@ describe('Módulo - Tipos Transação', () => {
   let server: Server;
 
   beforeEach(async () => {
-    server = await init()
     await sequelize.truncate({ force: true })
+    server = await init()
   })
 
   afterEach(async () => {

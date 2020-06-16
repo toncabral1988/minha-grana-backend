@@ -139,7 +139,7 @@ describe('Módulo - Categoria', () => {
       const categorias = await utils.insertCategoriasWithTipos()
 
       expect(categorias).not.toBeNull()
-      expect(categorias.length).toBe(3)
+      expect(categorias?.length).toBe(3)
 
       const tipos = await TipoTransacao.findAll()
 
@@ -302,6 +302,43 @@ describe('Módulo - Categoria', () => {
       })
 
       expect(response.statusCode).toBe(422)
+    })
+  })
+
+  describe('DELETE /{id}', () => {
+    it('should remove a category from the database', async () => {
+      const categoria = await Categoria.create(utils.generateFakeCategoria())
+
+      expect(categoria).not.toBeNull()
+
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `${url}/${categoria.id}`
+      })
+
+      expect(response.statusCode).toBe(200)
+
+      const categoriaDeleted = await Categoria.findByPk(categoria.id)
+
+      expect(categoriaDeleted).toBeNull()
+    })
+
+    it('should not remove a category when the id is invalid', async () => {
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `${url}/A`
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should not remove a category when the id is not registered on the database', async () => {
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `${url}/12`
+      })
+
+      expect(response.statusCode).toBe(404)
     })
   })
 })

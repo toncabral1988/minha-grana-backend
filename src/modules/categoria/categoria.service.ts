@@ -67,13 +67,23 @@ export default {
     }
 
     return categoria
-  }
+  },
+
+  remove: async (id: number, transaction?: Transaction) => Categoria.destroy({
+    where: { id },
+    transaction
+  })
 }
 
 async function findOrCreateTipos(tipos: any, transaction: Transaction | undefined) {
   const tiposFounded: TipoTransacao[] = []
 
   for (const tipo of tipos) {
+
+    if (tipo.nome) {
+      tipo.nome = tipo.nome.toUpperCase()
+    }
+
     const [tipoFounded,] = await TipoTransacao.findOrCreate({
       where: { ...tipo },
       transaction

@@ -93,5 +93,27 @@ export default {
       }
       return internal()
     }
+  },
+
+  remove: async (request: Request, h: ResponseToolkit) => {
+    const transaction = await sequelize.transaction()
+    try {
+      const { id } = request.params
+
+      const deleted = await CategoriaService.remove(Number(id), transaction)
+
+      if (!deleted) {
+        await transaction.rollback()
+        return Boom.notFound('Não foi possível remover a categoria, pois o id não está registrado na base de dados')
+      }
+
+      await transaction.commit()
+      return h.response()
+        .message('Categoria removida com sucesso')
+        .code(200)
+    } catch (error) {
+      await transaction.rollback()
+      return internal()
+    }
   }
 }

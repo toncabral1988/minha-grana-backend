@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "pretest": "NODE_ENV=test sequelize db:migrate",
-    "test": "NODE_ENV=test jest --verbose",
+    "test": "NODE_ENV=test jest --verbose --detectOpenHandles",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all ",
     "sequelize:test": "NODE_ENV=test sequelize --env test",
     "dev": "ts-node-dev --no-notify --respawn --transpileOnly -r tsconfig-paths/register src/index"

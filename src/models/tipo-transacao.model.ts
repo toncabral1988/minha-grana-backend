@@ -6,7 +6,9 @@ import {
   InstanceUpdateOptions, 
   Transaction,
   BelongsToManyGetAssociationsMixin,
-  Association
+  Association,
+  FindOptions,
+  where
 } from "sequelize";
 
 import sequelize from '@/database'
@@ -30,7 +32,7 @@ class TipoTransacao extends Model {
 
 const hooks = {
   beforeCreate: async (tipo: TipoTransacao, options: CreateOptions) => {
-    // tipo.nome = tipo.nome.toUpperCase()
+    tipo.nome = tipo.nome.toUpperCase()
 
     if (!tipo.id) {
       tipo.id = (await lastIndex(options.transaction)) + 1
@@ -42,7 +44,7 @@ const hooks = {
     let lastId = (await lastIndex(options.transaction))
 
     for (const tipo of tipos) {
-      // tipo.nome = tipo.nome.toUpperCase()
+      tipo.nome = tipo.nome.toUpperCase()
 
       if (!tipo.id) {
         tipo.id = ++lastId
@@ -50,7 +52,7 @@ const hooks = {
     }
   },
   beforeUpdate: (tipo: TipoTransacao, options: InstanceUpdateOptions) => {
-    // tipo.nome = tipo.nome.toUpperCase()
+    tipo.nome = tipo.nome.toUpperCase()
   }
 }
 

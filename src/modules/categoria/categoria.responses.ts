@@ -73,6 +73,25 @@ export default {
     400: {
       description: 'Parâmetros da requição inválidos'
     },
+    404: {
+      description: 'Categoria não encontrada'
+    },
+    422: {
+      description: 'O nome já está registrado'
+    },
+    500: internal
+  }),
+
+  deleteResponses: swaggerConfigurationResponse({
+    200: {
+      description: 'Categoria removida com sucesso'
+    },
+    400: {
+      description: 'Parâmetros da requição inválidos'
+    },
+    404: {
+      description: 'Categoria não encontrada'
+    },
     500: internal
   }),
 }
