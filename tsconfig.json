@@ -21,6 +21,9 @@
             ],
             "@tipo-transacao/*": [
                 "modules/tipo-transacao/*"
+            ],
+            "@categoria.*": [
+                "modules/categoria/*"
             ]
         },
         "esModuleInterop": true,

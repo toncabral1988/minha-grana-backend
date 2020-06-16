@@ -4,10 +4,15 @@ import {
   CreateOptions, 
   BulkCreateOptions, 
   InstanceUpdateOptions, 
-  Transaction
+  Transaction,
+  BelongsToManyGetAssociationsMixin,
+  Association,
+  FindOptions,
+  where
 } from "sequelize";
 
 import sequelize from '@/database'
+import { Categoria } from "./categoria.model";
 
 class TipoTransacao extends Model {
   public id: number
@@ -15,6 +20,14 @@ class TipoTransacao extends Model {
 
   public readonly created_at!: Date
   public readonly updated_at!: Date
+
+  public getCategorias!: BelongsToManyGetAssociationsMixin<Categoria>
+
+  public readonly categorias?: Categoria[]
+
+  public static associations: {
+    categorias: Association<TipoTransacao, Categoria>
+  }
 }
 
 const hooks = {
