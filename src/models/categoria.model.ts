@@ -68,9 +68,4 @@ TipoTransacao.belongsToMany(Categoria, {
   foreignKey: 'tipo_transacao_id'
 })
 
-Categoria.hasMany(Transacao, {
-  foreignKey: 'categoria_id',
-  as: 'transacoes'
-})
-
 export { Categoria }

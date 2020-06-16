@@ -85,9 +85,4 @@ TipoTransacao.init({
   sequelize
 })
 
-TipoTransacao.hasMany(Transacao, {
-  foreignKey: 'tipo_transacao_id',
-  as: 'transacoes'
-})
-
 export { TipoTransacao }
