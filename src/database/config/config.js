@@ -3,7 +3,7 @@ module.exports = {
     username: 'docker',
     password: 'docker',
     database: 'minha_grana',
-    host: 'localhost',
+    host: '192.168.25.116',
     port: 5432,
     dialect: 'postgres',
     logging: true,

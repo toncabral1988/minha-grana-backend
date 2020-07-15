@@ -28,7 +28,7 @@ module.exports = {
           allowNull: false,
           defaultValue: Sequelize.now
         },
-        tipo_transacoes_id: {
+        tipo_transacao_id: {
           type: Sequelize.INTEGER,
           allowNull: true,
         },
@@ -50,7 +50,7 @@ module.exports = {
         updated_at: Sequelize.DATE
       }, { transaction })
 
-      await queryInterface.addConstraint('transacoes', ['tipo_transacoes_id'], {
+      await queryInterface.addConstraint('transacoes', ['tipo_transacao_id'], {
         type: 'foreign key',
         name: 'fk_transacoes_tipo',
         references: {
