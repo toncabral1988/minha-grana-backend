@@ -1,5 +1,6 @@
 import faker from 'faker'
 import { type as tipo } from 'os'
+import categoria from '@/modules/categoria'
 
 const generateTransacao = (opcoes?: {
   tipo?: number,
@@ -21,11 +22,16 @@ const generateTransacao = (opcoes?: {
     max: 2
   }),
   categoria: {
-    nome: faker.commerce.department()
+    nome:  faker.commerce.department()
   }
 })
 
-const generateTransacoes = (quantidade = 5, opcoes?: { tipo?: number, mes?: number, ano?: number }) => {
+const generateTransacoes = (quantidade = 5, opcoes?: {
+  tipo?: number,
+  mes?: number,
+  ano?: number,
+  categoria_id?: number
+}) => {
   const transacoes = []
 
   const dataVencimento = opcoes?.ano && opcoes?.mes ? {
@@ -34,7 +40,19 @@ const generateTransacoes = (quantidade = 5, opcoes?: { tipo?: number, mes?: numb
   } : null
 
   for (let i = 0; i < quantidade; i++) {
-    transacoes.push(generateTransacao({ tipo: opcoes?.tipo, dataVencimento }))
+    let transacao = generateTransacao({ 
+      tipo: opcoes?.tipo, 
+      dataVencimento,
+    })
+
+    if (opcoes?.categoria_id) {
+      delete(transacao.categoria)
+    }
+
+    transacoes.push(opcoes?.categoria_id ? ({
+      ...transacao,
+      categoria_id: opcoes?.categoria_id
+    }): transacao)
   }
 
   return transacoes

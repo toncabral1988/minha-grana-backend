@@ -42,7 +42,7 @@ module.exports = {
           defaultValue: 0,
           comments: '0 - Não realizado, 1 - Realizado'
         },
-        observações: {
+        observacoes: {
           type: Sequelize.STRING(1024),
           allowNull: true
         },

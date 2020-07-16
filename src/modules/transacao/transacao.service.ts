@@ -27,7 +27,7 @@ export default {
     if (categoria) {
       categoria.nome = categoria.nome ? categoria.nome.toUpperCase() : categoria.nome
       
-      const [categoriaCriada] = await Categoria.findOrCreate({
+      const [categoriaCriada, created] = await Categoria.findOrCreate({
         where: { ...categoria },
         transaction
       })
@@ -47,7 +47,7 @@ export default {
         [Op.gte]: new Date(ano, mes - 1),
         [Op.lte]: new Date(new Date(ano, mes).setDate(-1))
       }
-    } : undefined
+    } : {}
 
     return Transacao.findAll({
       where: {

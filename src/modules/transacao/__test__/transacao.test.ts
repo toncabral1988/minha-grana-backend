@@ -20,6 +20,10 @@ describe('Módulo - Transação', () => {
     await server.stop()
   })
 
+  afterAll(async () => {
+    await sequelize.truncate({ force: true })
+  })
+
   describe('POST /', () => {
     it('should insert a transaction on the database', async () => {
       const transacao = utils.generateTransacao()
@@ -181,6 +185,94 @@ describe('Módulo - Transação', () => {
 
       expect(result).not.toBeNull()
       expect(result.length).toBeGreaterThanOrEqual(5)
+    })
+
+    it('should return an error 400 when the year or month is invalid', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}?ano=1950&mes=13`
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should return an error 404 when there are no transactions on the database in the period informed', async () => {
+      const transacoes = await Transacao.bulkCreate([
+        ...utils.generateTransacoes(5, {
+          mes: 7,
+          ano: 2020
+        }),
+      ])
+
+      expect(transacoes).not.toBeNull()
+      expect(transacoes.length).toBe(5)
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}?ano=2020&mes=6`
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+  })
+
+  describe('GET ?categoria_id', () => {
+    it ('should return a transactions list by category', async () => {
+      const categorias = await insertHelper.categoria()
+
+      expect(categorias).not.toBeNull()
+      expect(categorias.length).toBe(10)
+
+      const transacoes = await Transacao.bulkCreate([
+        ...utils.generateTransacoes(5, { categoria_id: categorias[0].id}),
+        ...utils.generateTransacoes(5, { categoria_id: categorias[1].id}),
+      ])
+
+      expect(transacoes).not.toBeNull()
+      expect(transacoes.length).toBe(10)
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}?categoria_id=${categorias[0].id}`
+      })
+
+      expect(response.statusCode).toBe(200)
+      
+      const result = response.result as Transacao[]
+
+      expect(result).not.toBeNull()
+      expect(result.length).toBeGreaterThanOrEqual(5)
+    })
+
+    it ('should return an error 400 when the category id is invalid', async () => {
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}?categoria_id=abc`
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it ('should return an error 404 when there are no transactions on the database with the category id informed', async () => {
+      const categorias = await insertHelper.categoria()
+
+      expect(categorias).not.toBeNull()
+      expect(categorias.length).toBe(10)
+
+      const transacoes = await Transacao.bulkCreate([
+        ...utils.generateTransacoes(5, { categoria_id: categorias[1].id}),
+      ])
+
+      expect(transacoes).not.toBeNull()
+      expect(transacoes.length).toBe(5)
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}?categoria_id=${categorias[0].id}`
+      })
+
+      expect(response.statusCode).toBe(404)
     })
   })
 })

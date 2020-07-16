@@ -91,14 +91,22 @@ const query = Joi.object({
         'number.max': 'O ano deve ser inferior a 2050'
       }
     }),
-    mes: Joi.number()
+  mes: Joi.number()
+    .optional()
+    .min(1)
+    .max(12)
+    .options({
+      messages: {
+        'number.min': 'Não existe mês no valor inferior a um',
+        'number.max': 'Nào existe mês no valor numérico superior a doze'
+      }
+    }),
+    categoria_id: Joi.number()
       .optional()
       .min(1)
-      .max(12)
       .options({
         messages: {
-          'number.min': 'Não existe mês no valor inferior a um',
-          'number.max': 'Nào existe mês no valor numérico superior a doze'
+          'number.min': 'O id da categoria é inválido'
         }
       })
 })
