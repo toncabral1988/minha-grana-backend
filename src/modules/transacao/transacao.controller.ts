@@ -41,5 +41,25 @@ export default {
       await transaction.rollback()
       return internal()
     }
+  },
+
+  indexById: async (request: Request, h: ResponseToolkit) => {
+    const transaction = await sequelize.transaction()
+    try {
+      const transacao = await TransacaoService.indexByPk(request.params.id, transaction)
+
+      if (!transacao) {
+        return Boom.notFound('Não foi encontrada nenhuma transação para o ID informado')
+      }
+
+      await transaction.commit()
+      return h.response(transacao)
+        .message('Transação recuperada com sucesso')
+        .code(200)
+    } catch (error) {
+      await transaction.rollback()
+      
+      return internal()
+    }
   }
 }

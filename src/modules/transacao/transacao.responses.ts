@@ -51,5 +51,16 @@ export default {
       description: 'Não existem transaçòes cadastradas no banco'
     },
     500: internal
+  }),
+
+  getById: swaggerConfigurationResponse({
+    200: {
+      description: 'Transação recuperada com sucesso',
+      schemas: transacaoSchema
+    },
+    404: {
+      description: 'Não existe transação com o id informado'
+    },
+    500: internal
   })
 }

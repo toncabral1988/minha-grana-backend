@@ -275,4 +275,44 @@ describe('Módulo - Transação', () => {
       expect(response.statusCode).toBe(404)
     })
   })
+
+  describe ('GET /{id}', () => {
+    it ('should return a transaction when the request id param is valid', async () => {
+      const transacoes = await Transacao.bulkCreate(
+        utils.generateTransacoes(3)
+      )
+
+      expect(transacoes).not.toBeNull()
+      expect(transacoes.length).toBe(3)
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}/${transacoes[0].id}`
+      })
+
+      expect(response.statusCode).toBe(200)
+
+      const result =  response.result as Transacao
+
+      expect(result.id).toBe(transacoes[0].id)
+    })
+
+    it ('should return an error 400 when id param is invalid', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}/abc`
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it ('should return an error 404 when there are not transaction registered with the id param on the database', async () => {
+      const response = await server.inject({
+        method: 'GET',
+        url: `${url}/1`
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+  })
 })

@@ -59,5 +59,8 @@ export default {
       ],
       transaction
     })
-  }
+  },
+
+  indexByPk: async (id: any, transaction?: Transaction) => 
+    Transacao.findByPk(id, { transaction })
 }

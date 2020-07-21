@@ -111,7 +111,19 @@ const query = Joi.object({
       })
 })
 
+const idParam = Joi.object({
+  id: Joi.number()
+    .required()
+    .min(1)
+    .options({
+      messages: {
+        'number.min': 'É necessário informar um id válido'
+      }
+    })
+})
+
 export default {
   post: validate({ payload: postPayload }),
-  getQuery: validate({ query })
+  getQuery: validate({ query }),
+  getById: validate({ params: idParam })
 }
