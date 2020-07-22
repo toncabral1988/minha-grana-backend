@@ -10,7 +10,7 @@
     "test": "NODE_ENV=test jest --verbose --runInBand --bail --detectOpenHandles",
     "posttest": "NODE_ENV=test sequelize db:migrate:undo:all ",
     "sequelize:test": "NODE_ENV=test sequelize --env test",
-    "dev": "ts-node-dev --no-notify --respawn --transpileOnly -r tsconfig-paths/register src/index"
+    "dev": "ts-node-dev --no-notify --respawn --transpile-only -r tsconfig-paths/register src/index"
   },
   "dependencies": {
     "@hapi/boom": "^9.1.0",

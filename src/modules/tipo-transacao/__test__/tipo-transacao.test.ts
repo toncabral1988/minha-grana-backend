@@ -21,6 +21,10 @@ describe('Módulo - Tipos Transação', () => {
     await server.stop()
   })
 
+  afterAll(async () => {
+    await sequelize.truncate({ force: true })
+  })
+
   describe('POST /', () => {
     it('should insert a transaction type', async () => {
 

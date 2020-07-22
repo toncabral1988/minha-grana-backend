@@ -28,7 +28,11 @@ module.exports = {
           allowNull: false,
           defaultValue: Sequelize.now
         },
-        tipo_transacoes_id: {
+        tipo_transacao_id: {
+          type: Sequelize.INTEGER,
+          allowNull: true,
+        },
+        categoria_id: {
           type: Sequelize.INTEGER,
           allowNull: true,
         },
@@ -38,7 +42,7 @@ module.exports = {
           defaultValue: 0,
           comments: '0 - Não realizado, 1 - Realizado'
         },
-        observações: {
+        observacoes: {
           type: Sequelize.STRING(1024),
           allowNull: true
         },
@@ -46,11 +50,23 @@ module.exports = {
         updated_at: Sequelize.DATE
       }, { transaction })
 
-      await queryInterface.addConstraint('transacoes', ['tipo_transacoes_id'], {
+      await queryInterface.addConstraint('transacoes', ['tipo_transacao_id'], {
         type: 'foreign key',
         name: 'fk_transacoes_tipo',
         references: {
           table: 'tipos_transacao',
+          field: 'id'
+        },
+        onDelete: 'restrict',
+        onUpdate: 'cascade',
+        transaction
+      })
+
+      await queryInterface.addConstraint('transacoes', ['categoria_id'], {
+        type: 'foreign key',
+        name: 'fk_transacoes_categoria',
+        references: {
+          table: 'categorias',
           field: 'id'
         },
         onDelete: 'restrict',
