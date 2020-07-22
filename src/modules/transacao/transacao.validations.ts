@@ -46,6 +46,17 @@ const postPayload = Joi.object({
         'number.required': 'É obrigatório informar o tipo de transação',
       }
     }),
+  situacao: Joi.number()
+    .optional()
+    .min(0)
+    .default(0)
+    .options({
+      messages: {
+        'number.min': 'Informe uma situação válida para a transação',
+      }
+    }),
+  observacoes: Joi.string()
+    .optional(),
   categoria: Joi.object({
     id: Joi.number()
       .optional()
@@ -65,6 +76,89 @@ const postPayload = Joi.object({
         }
       })
   }).required()
+    .options({
+      messages: {
+        'any.required': 'É obrigatório informar a categoria'
+      }
+    })
+})
+
+const putPayload = Joi.object({
+  descricao: Joi.string()
+    .optional()
+    .not().empty()
+    .options({
+      messages: {
+        'string.empty': 'É obrigatório informar uma descrição para a transação'
+      }
+    }),
+  valor: Joi.number()
+    .optional()
+    .min(0.01)
+    .options({
+      messages: {
+        'number.min': 'O valor da transação deve ser no mínimo de 0,1 centavos'
+      }
+    }),
+  data_realizacao: Joi.date()
+    .optional()
+    .options({
+      messages: {
+        'date': 'Informe uma data de realização válida'
+      }
+    }),
+  data_vencimento: Joi.date()
+    .optional()
+    .options({
+      messages: {
+        'date': 'Informe uma data de vencimento válida'
+      }
+    }),
+  categoria_id: Joi.number()
+    .optional()
+    .min(1)
+    .options({
+      messages: {
+        'number.min': 'Informe o id da categoria de transação válido',
+      }
+    }),
+  tipo_transacao_id: Joi.number()
+    .optional()
+    .min(1)
+    .options({
+      messages: {
+        'number.min': 'Informe o id do tipo de transação válido',
+      }
+    }),
+  situacao: Joi.number()
+    .optional()
+    .min(0)
+    .options({
+      messages: {
+        'number.min': 'Informe uma situação válida para a transação',
+      }
+    }),
+  observacoes: Joi.string()
+    .optional(),
+  categoria: Joi.object({
+    id: Joi.number()
+      .optional()
+      .min(1)
+      .options({
+        messages: {
+          'number.min': 'É necessário informar um id válido'
+        }
+      }),
+    nome: Joi.string()
+      .required()
+      .not().empty()
+      .options({
+        messages: {
+          'string.required': 'É obrigatório informar o nome da categoria',
+          'string.empty': 'É obrigatório informar o nome da categoria válido'
+        }
+      })
+  }).optional()
     .options({
       messages: {
         'any.required': 'É obrigatório informar a categoria'
@@ -101,14 +195,14 @@ const query = Joi.object({
         'number.max': 'Nào existe mês no valor numérico superior a doze'
       }
     }),
-    categoria_id: Joi.number()
-      .optional()
-      .min(1)
-      .options({
-        messages: {
-          'number.min': 'O id da categoria é inválido'
-        }
-      })
+  categoria_id: Joi.number()
+    .optional()
+    .min(1)
+    .options({
+      messages: {
+        'number.min': 'O id da categoria é inválido'
+      }
+    })
 })
 
 const idParam = Joi.object({
@@ -125,5 +219,6 @@ const idParam = Joi.object({
 export default {
   post: validate({ payload: postPayload }),
   getQuery: validate({ query }),
-  getById: validate({ params: idParam })
+  getById: validate({ params: idParam }),
+  put: validate({ params: idParam, payload: putPayload })
 }

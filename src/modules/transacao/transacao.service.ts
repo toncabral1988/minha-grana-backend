@@ -2,6 +2,7 @@ import { Transaction, Includeable, Op } from "sequelize";
 
 import { Transacao } from "@/models/transacao.model";
 import { Categoria } from "@/models/categoria.model";
+import transacaoValidations from "./transacao.validations";
 
 const include: Includeable[] = [
   {
@@ -26,7 +27,7 @@ export default {
 
     if (categoria) {
       categoria.nome = categoria.nome ? categoria.nome.toUpperCase() : categoria.nome
-      
+
       const [categoriaCriada, created] = await Categoria.findOrCreate({
         where: { ...categoria },
         transaction
@@ -61,6 +62,19 @@ export default {
     })
   },
 
-  indexByPk: async (id: any, transaction?: Transaction) => 
+  indexByPk: async (id: any, transaction?: Transaction) =>
+    Transacao.findByPk(id, { transaction }),
+
+
+  update: async (id: any, payload: any, transaction?: Transaction) => 
     Transacao.findByPk(id, { transaction })
+      .then(transacao => {
+        if (!transacao) {
+          return null
+        }
+
+        return transacao.update(
+          { ...payload }, { transaction }
+        )
+      })
 }

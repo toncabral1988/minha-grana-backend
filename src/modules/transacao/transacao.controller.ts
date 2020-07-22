@@ -49,12 +49,38 @@ export default {
       const transacao = await TransacaoService.indexByPk(request.params.id, transaction)
 
       if (!transacao) {
+        await transaction.rollback()
         return Boom.notFound('Não foi encontrada nenhuma transação para o ID informado')
       }
 
       await transaction.commit()
       return h.response(transacao)
         .message('Transação recuperada com sucesso')
+        .code(200)
+    } catch (error) {
+      await transaction.rollback()
+      
+      return internal()
+    }
+  },
+
+  update: async (request: Request, h: ResponseToolkit) => {
+    const transaction = await sequelize.transaction()
+    try {
+      const transacao = await TransacaoService.update(
+        request.params.id,
+        request.payload,
+        transaction
+      )
+
+      if (!transacao) {
+        await transaction.rollback()
+        return Boom.notFound('Não foi encontrada nenhuma transação para o ID informado')
+      }
+      
+      await transaction.commit()
+      return h.response(transacao)
+        .message('Transação atualizada com sucesso')
         .code(200)
     } catch (error) {
       await transaction.rollback()

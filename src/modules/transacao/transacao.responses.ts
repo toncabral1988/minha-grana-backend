@@ -58,6 +58,23 @@ export default {
       description: 'Transação recuperada com sucesso',
       schemas: transacaoSchema
     },
+    400: {
+      description: 'O id informado não é válido'
+    },
+    404: {
+      description: 'Não existe transação com o id informado'
+    },
+    500: internal
+  }),
+
+  put: swaggerConfigurationResponse({
+    200: {
+      description: 'Transação cadastrada com sucesso',
+      schemas: transacaoSchema
+    },
+    400: {
+      description: 'Parâmetros da requição inválidos'
+    },
     404: {
       description: 'Não existe transação com o id informado'
     },

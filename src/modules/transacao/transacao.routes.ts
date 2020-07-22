@@ -3,8 +3,6 @@ import { ServerRoute } from '@hapi/hapi'
 import TransacaoController from './transacao.controller'
 import TransacaoValidations from './transacao.validations'
 import TransacaoResponses from './transacao.responses'
-import { validate, swaggerConfigurationResponse } from '@/utils/route-options'
-import { inputSchemas } from '../tipo-transacao/validation/schemas'
 import responses from '../tipo-transacao/validation/responses'
 
 const tags = ['api', 'transacao']
@@ -40,13 +38,26 @@ const getById: ServerRoute = {
     tags,
     notes: 'Recupera uma transação pelo seu id',
     handler: TransacaoController.indexById,
-    validate: validate({ params: inputSchemas.idParam }),
-    plugins: swaggerConfigurationResponse(responses.getById)
+    validate: TransacaoValidations.getById,
+    plugins: TransacaoResponses.getById
+  }
+}
+
+const put: ServerRoute = {
+  method: 'PUT',
+  path: '/{id}',
+  options: {
+    tags,
+    notes: 'Atualiza as informações de uma transação',
+    handler: TransacaoController.update,
+    validate: TransacaoValidations.put,
+    plugins: TransacaoResponses.put
   }
 }
 
 export default [
   post,
   get,
-  getById
+  getById,
+  put
 ]

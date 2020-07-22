@@ -315,4 +315,78 @@ describe('Módulo - Transação', () => {
       expect(response.statusCode).toBe(404)
     })
   })
+
+  describe ('PUT /{id}', () => {
+    it ('should update a transaction when the request payload is valid', async () => {
+      const transacao = await Transacao.create(
+        utils.generateTransacao()
+      )
+
+      expect(transacao).not.toBeNull()
+      
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/${transacao?.id}`,
+        payload: {
+          situacao: 1,
+          observacoes: 'Pago via nubank',
+          valor: 23.23
+        }
+      })
+
+      expect(response.statusCode).toBe(200)
+
+      const result = response.result as Transacao
+
+      expect(result).not.toBeNull()
+      expect(result.situacao).toBe(1)
+      expect(result.id).toBe(transacao.id)
+      expect(result.observacoes).toBe('Pago via nubank')
+    })
+
+    it('should return an error 400 when the request id is invalid', async () => {
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/abc`,
+        payload: {
+          situacao: 1,
+          observacoes: 'Pago via nubank'
+        }
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should return an error 400 when the request payload is invalid', async () => {
+      const transacao = await Transacao.create(
+        utils.generateTransacao()
+      )
+
+      expect(transacao).not.toBeNull()
+
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/${transacao?.id}`,
+        payload: {
+          situacao: 'abc',
+          observacoes: 'Pago via nubank'
+        }
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+    it('should return an error 400 when the request payload is invalid', async () => {
+      const response = await server.inject({
+        method: 'PUT',
+        url: `${url}/3`,
+        payload: {
+          situacao: 1,
+          observacoes: 'Pago via nubank'
+        }
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+  })
 })
