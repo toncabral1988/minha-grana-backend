@@ -87,5 +87,26 @@ export default {
       
       return internal()
     }
+  },
+
+  remove: async (request: Request, h: ResponseToolkit) => {
+    const transaction = await sequelize.transaction()
+    try {
+      const removido = await TransacaoService.remove(request.params.id, transaction)
+
+      if (!removido) {
+        await transaction.rollback()
+        return Boom.notFound('Não foi possível remover a transação, pois não existe transação com o id informado')
+      }
+
+      await transaction.commit()
+      return h.response()
+        .message('Transação removida com sucesso')
+        .code(200)
+    } catch (error) {
+      await transaction.rollback()
+      
+      return internal()
+    }
   }
 }

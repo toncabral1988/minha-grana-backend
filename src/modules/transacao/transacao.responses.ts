@@ -79,5 +79,18 @@ export default {
       description: 'Não existe transação com o id informado'
     },
     500: internal
+  }),
+
+  delete: swaggerConfigurationResponse({
+    200: {
+      description: 'Transação removida com sucesso',
+    },
+    400: {
+      description: 'O id informado não é válido'
+    },
+    404: {
+      description: 'Não existe transação com o id informado'
+    },
+    500: internal
   })
 }

@@ -220,5 +220,6 @@ export default {
   post: validate({ payload: postPayload }),
   getQuery: validate({ query }),
   getById: validate({ params: idParam }),
-  put: validate({ params: idParam, payload: putPayload })
+  put: validate({ params: idParam, payload: putPayload }),
+  delete: validate({ params: idParam })
 }

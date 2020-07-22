@@ -389,4 +389,40 @@ describe('Módulo - Transação', () => {
       expect(response.statusCode).toBe(404)
     })
   })
+
+  describe('DELETE /{id}', () => {
+    it('should remove a transaction when the request param is valid', async () => {
+      const transacao = await Transacao.create(
+        utils.generateTransacao()
+      )
+
+      expect(transacao).not.toBeNull()
+
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `${url}/${transacao.id}`
+      })
+
+      expect(response.statusCode).toBe(200)
+    })
+
+    it('should return an error 404 when there is not transaction with the id on the database', async () => {
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `${url}/1`
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+
+    it('should return an error 400 when the request param is invalid', async () => {
+      const response = await server.inject({
+        method: 'DELETE',
+        url: `${url}/abc`
+      })
+
+      expect(response.statusCode).toBe(400)
+    })
+
+  })
 })

@@ -66,7 +66,7 @@ export default {
     Transacao.findByPk(id, { transaction }),
 
 
-  update: async (id: any, payload: any, transaction?: Transaction) => 
+  update: async (id: any, payload: any, transaction?: Transaction) =>
     Transacao.findByPk(id, { transaction })
       .then(transacao => {
         if (!transacao) {
@@ -76,5 +76,12 @@ export default {
         return transacao.update(
           { ...payload }, { transaction }
         )
-      })
+      }),
+
+
+  remove: async (id: any, transaction?: Transaction) =>
+    Transacao.destroy({
+      where: { id },
+      transaction
+    })
 }

@@ -55,9 +55,22 @@ const put: ServerRoute = {
   }
 }
 
+const remove: ServerRoute = {
+  method: 'DELETE',
+  path: '/{id}',
+  options: {
+    tags,
+    notes: 'Remove uma transação',
+    handler: TransacaoController.remove,
+    validate: TransacaoValidations.delete,
+    plugins: TransacaoResponses.delete
+  }
+}
+
 export default [
   post,
   get,
   getById,
-  put
+  put,
+  remove
 ]
