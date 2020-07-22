@@ -22,7 +22,8 @@ module.exports = {
         updated_at: Sequelize.DATE
       }, { transaction })
 
-      await queryInterface.addConstraint('categorias_tipos', ['categoria_id'], {
+      await queryInterface.addConstraint('categorias_tipos', {
+        fields: ['categoria_id'],
         type: 'foreign key',
         name: 'fk_categoriastipos_categoria',
         references: {
@@ -34,7 +35,8 @@ module.exports = {
         transaction
       })
 
-      await queryInterface.addConstraint('categorias_tipos', ['tipo_transacao_id'], {
+      await queryInterface.addConstraint('categorias_tipos', {
+        fields: ['tipo_transacao_id'],
         type: 'foreign key',
         name: 'fk_categoriastipos_tipo',
         references: {

@@ -18,7 +18,8 @@ module.exports = {
         updated_at: Sequelize.DATE
       }, { transaction })
 
-      await queryInterface.addConstraint('categorias', ['nome'], {
+      await queryInterface.addConstraint('categorias', {
+        fields: ['nome'],
         type: 'unique',
         name: 'un_categorias_nome',
         transaction
