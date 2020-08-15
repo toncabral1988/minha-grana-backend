@@ -3,6 +3,7 @@ import glob from 'fast-glob'
 export default async (path: string, deep?: number | undefined) => {
     path = path.replace(/\\/g, '/')
 
+    
     const files = await glob(path, {
         absolute: false,
         deep: deep
